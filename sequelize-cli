@@ -1,0 +1,15 @@
+npx sequelize db:create
+
+npx sequelize-cli model:generate --name Users --attributes name:string,username:string,email:string,password:string,role:string,status:string,address:string,phoneNumber:string
+
+npx sequelize-cli model:generate --name Movies --attributes title:string,synopsis:string,trailerUrl:string,imgUrl:string,rating:integer,status:string
+
+npx sequelize-cli model:generate --name Bookmarks --attributes movieId:integer,userId:integer
+
+npx sequelize-cli migration:generate --name add-constraint-to-Bookmarks
+
+npx sequelize db:migrate
+
+npx sequelize seed:generate --name seeding-all-movies
+
+npx sequelize db:seed --seed 20240926043336-seeding-all-movies.js
