@@ -31,7 +31,7 @@ jobs:
     - name: Install Dependencies
       run: npm install
 
-    - name: Create Database
+    - name: Run Sequelize
       env:
         NODE_ENV: production
         PGHOST: ${{ secrets.DB_HOST }}
@@ -42,17 +42,8 @@ jobs:
       run: |
         npm install -g sequelize-cli
         npx sequelize db:create || echo "Database already exists, skipping creation"
-
-    - name: Run Database Migration
-      env:
-        NODE_ENV: production
-        PGHOST: ${{ secrets.DB_HOST }}
-        PGPORT: ${{ secrets.DB_PORT }}
-        PGDATABASE: ${{ secrets.DB_NAME }}
-        PGUSER: ${{ secrets.DB_USER }}
-        PGPASSWORD: ${{ secrets.DB_PASSWORD }}
-      run: |
         npx sequelize db:migrate
+        npx sequelize db:seed:all
 
     - name: Run Tests
       run: |
