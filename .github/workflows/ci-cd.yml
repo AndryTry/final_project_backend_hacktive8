@@ -68,6 +68,10 @@ jobs:
 
     - name: Checkout repository
       uses: actions/checkout@v2
+    
+    - name: Install Railway CLI
+      run: |
+        curl -fsSL https://railway.app/install.sh | sh 
 
     - name: Deploy to Railway
       env:
