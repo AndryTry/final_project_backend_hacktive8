@@ -1,4 +1,4 @@
-name: Final Project Backend Hacktiv8
+name: Final Project and Railway Deployment
 
 on:
   push:
@@ -13,40 +13,51 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    # Step 1: Checkout the repository
     - name: Checkout repository
       uses: actions/checkout@v2
 
+    # Step 2: Set up Docker Buildx
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v1
+      uses: docker/setup-buildx-action@v2
 
-    - name: Cache Docker layers
-      uses: actions/cache@v2
-      with:
-        path: /tmp/.buildx-cache
-        key: ${{ runner.os }}-buildx-${{ github.sha }}
-        restore-keys: |
-          ${{ runner.os }}-buildx-
+    # Step 3: Install Docker Compose (if needed)
+    - name: Install Docker Compose
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y docker-compose
 
+    # Step 4: Build Docker Image
     - name: Build Docker image
       run: |
-        docker build -t your_docker_image_name:latest .
+        docker build -t my-node-app:latest .
 
+    # Step 5: Run Tests
     - name: Run Tests
       run: |
         docker-compose up -d db
-        docker run --network="host" your_docker_image_name npm test
+        docker run --network="host" my-node-app:latest npm test
 
   deploy:
+    needs: build
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
 
     steps:
+    # Step 1: Checkout the repository
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: Deploy to Railway
+    # Step 2: Install Railway CLI
+    - name: Install Railway CLI
       env:
         RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
       run: |
         curl -fsSL https://railway.app/install.sh | sh
-        railway up
+
+    # Step 3: Deploy to Railway
+    - name: Deploy to Railway
+      env:
+        RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+      run: |
+        railway up --yes
