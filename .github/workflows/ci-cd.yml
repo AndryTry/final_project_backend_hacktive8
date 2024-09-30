@@ -41,7 +41,7 @@ jobs:
         PGPASSWORD: ${{ secrets.DB_PASSWORD }}
       run: |
         npm install -g sequelize-cli
-        npx sequelize db:create
+        npx sequelize db:create || echo "Database already exists, skipping creation"
 
     - name: Run Database Migration
       env:
