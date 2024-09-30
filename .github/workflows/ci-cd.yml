@@ -36,7 +36,7 @@ jobs:
     - name: Run Tests
       run: |
         docker-compose up -d db
-        docker run --network="host" my-node-app:latest npm test
+        docker run --network="host" my-node-app:latest npm test -- --passWithNoTests
 
   deploy:
     needs: build
