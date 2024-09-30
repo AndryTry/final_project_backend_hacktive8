@@ -13,25 +13,24 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # Step 1: Checkout the repository
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    # Step 2: Set up Docker Buildx
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
 
-    # Step 3: Install Docker Compose (if needed)
     - name: Install Docker Compose
       run: |
         sudo apt-get update
         sudo apt-get install -y docker-compose
 
-    # Step 4: Build Docker Image
     - name: Build Docker image
       run: |
         docker build -t my-node-app:latest .
-    
+   
+    - name: Install Dependencies
+      run: npm install
+
     - name: Create Database
       env:
         PGHOST: ${{ secrets.DB_HOST }}
@@ -53,7 +52,6 @@ jobs:
       run: |
         npx sequelize db:migrate
 
-    # Step 5: Run Tests
     - name: Run Tests
       run: |
         docker-compose up -d db
@@ -65,18 +63,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # Step 1: Checkout the repository
+
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    # Step 2: Install Railway CLI
-    - name: Install Railway CLI
-      env:
-        RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-      run: |
-        curl -fsSL https://railway.app/install.sh | sh
-
-    # Step 3: Deploy to Railway
     - name: Deploy to Railway
       env:
         RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
