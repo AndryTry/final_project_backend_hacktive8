@@ -59,7 +59,7 @@ exports.login = async(req, res, next) => {
         const token = sign(payload, process.env.JWT_SECRET);
 
         res.status(200).json({
-            accessToken: token,
+            token: token,
             name: user.name,
             role: user.role,
             id: user.id

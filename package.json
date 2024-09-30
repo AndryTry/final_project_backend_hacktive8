@@ -4,6 +4,7 @@
   "description": "Final Project",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
     "test": "jest"
   },
   "author": "rudito prayogo",

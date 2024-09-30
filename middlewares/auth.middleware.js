@@ -5,7 +5,7 @@ const { where } = require('sequelize');
 
 
 const auth = async(req, res, next) =>{
-    const token = req.headers['accesstoken'];
+    const token = req.headers['token'];
     if (!token) {
         return res.status(401).json({ 
             error: "Unauthorized",
