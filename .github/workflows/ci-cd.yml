@@ -31,6 +31,27 @@ jobs:
     - name: Build Docker image
       run: |
         docker build -t my-node-app:latest .
+    
+    - name: Create Database
+      env:
+        PGHOST: ${{ secrets.DB_HOST }}
+        PGPORT: ${{ secrets.DB_PORT }}
+        PGDATABASE: ${{ secrets.DB_NAME }}
+        PGUSER: ${{ secrets.DB_USER }}
+        PGPASSWORD: ${{ secrets.DB_PASSWORD }}
+      run: |
+        npm install -g sequelize-cli
+        npx sequelize db:create
+
+    - name: Run Database Migration
+      env:
+        PGHOST: ${{ secrets.DB_HOST }}
+        PGPORT: ${{ secrets.DB_PORT }}
+        PGDATABASE: ${{ secrets.DB_NAME }}
+        PGUSER: ${{ secrets.DB_USER }}
+        PGPASSWORD: ${{ secrets.DB_PASSWORD }}
+      run: |
+        npx sequelize db:migrate
 
     # Step 5: Run Tests
     - name: Run Tests
